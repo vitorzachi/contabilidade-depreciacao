@@ -1,0 +1,81 @@
+<div class="container">
+    <h2>Depreciação Soma dos Dígitos</h2>
+
+    <form id="form" method="post" action="/depreciacao/soma-digitos">
+
+        <div class="row form-group">
+            <div class="col-sm-2">
+                <label for="anos">Número de anos</label>
+                <input name="anos" type="number" class="form-control" id="anos">
+            </div>
+            <div class="col-sm-4">
+                <label for="valor">Valor do bem</label>
+                <input name="valor" type="text" data-affixes-stay="true" data-prefix="R$ " data-thousands="."
+                    data-decimal="," class="form-control money" id="valor">
+            </div>
+            <div class="col-sm-4">
+                <label for="tipo">Crescente/decrescente</label>
+                <select name="tipo" class="form-control" id="tipo">
+                    <option value="CRESCENTE">Crescente</option>
+                    <option value="DECRESCENTE">Decrescente</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-primary">Calcular</button>
+                <div id="aguarde" class="spinner-border" role="status" style="display: none;">
+                    <span class="sr-only">Validando...</span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr>
+    <div class="row form-group">
+        <div class="col-sm-12" id="calc-target">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/assets/jquery.maskMoney.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.money').maskMoney();
+
+        $('form').on('submit', function (e) {
+            const $form = $(this);
+            e.preventDefault();
+            e.stopPropagation();
+
+            $('#aguarde').show();
+            $('form button[type=submit]').hide();
+
+            const payload = {};
+            payload.anos = $('#anos').val();
+            payload.valor = $('#valor').maskMoney('unmasked')[0];
+            payload.tipo = $('#tipo').val();;
+
+            fetch($form.attr('action'), {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.text())
+            .then(function (responseText) {
+                $('#aguarde').hide();
+                $('form button[type=submit]').show();
+
+                $('#calc-target').html(responseText);
+            }).catch(function (error) {
+                    $('#aguarde').hide();
+                    $('form button[type=submit]').show();
+                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                });
+        })
+    })
+
+</script>

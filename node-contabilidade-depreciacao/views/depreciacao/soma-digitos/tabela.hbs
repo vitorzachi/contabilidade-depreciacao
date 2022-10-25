@@ -1,0 +1,36 @@
+<div class="container">
+
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-8">
+                <h2>Depreciação</h2>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Ano</th>
+                <th scope="col">Proporção</th>
+                <th scope="col">Taxa</th>
+                <th scope="col">Valor Depreciação</th>
+                <th scope="col">Valor do bem</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each linhas}}
+                    <tr>
+                        <th scope="row">{{ano}}</th>
+                        <td>{{proporcao}}</td>
+                        <td>{{porcentagem}}</td>
+                        <td>{{valor_depreciacao}}</td>
+                        <td>{{valor_bem}}</td>
+                    </tr>
+            {{else}}
+            <tr>
+                <td colspan="5" align="center">Nenhum resultado</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
